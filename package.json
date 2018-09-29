@@ -1,0 +1,17 @@
+{
+    "name": "stripmaker",
+    "version": "1.0.0",
+    "description": "creating strips from images",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "author": "Aionics",
+    "license": "CC BY-SA 4.0",
+    "devDependencies": {
+        "electron": "^3.0.0"
+    },
+    "dependencies": {
+        "pangyp": "^2.3.3"
+    }
+}
