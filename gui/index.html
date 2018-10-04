@@ -1,52 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>stripmaker CC BY-SA 4.0</title>
-        <link rel="stylesheet" href="libs/materialize/materialize.min.css">
-        <link rel="stylesheet" href="libs/materialize/icon.css">
-        <link rel="stylesheet" href="index.css">
-        <script src="libs/knockout/knockout-3.4.2.js" charset="utf-8"></script>
-        <script src="libs/knockout/knockout-es5.min.js" charset="utf-8"></script>
-        <script src="libs/materialize/materialize.min.js" charset="utf-8"></script>
-        <script src="js/Frame.js" charset="utf-8"></script>
-        <script src="index.js" charset="utf-8"></script>
-    </head>
-    <body class="blue-grey darken-4">
-        <div class="maincontainer">
-            <div class="row">
-                <div class="col s3">
-                    <a class="waves-effect waves-light btn" id="test">open</a>
-                    <ul class="frameslist">
-                        <li class="">1</li>
-                        <li class="selected">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                        <li class="">2</li>
-                    </ul>
-                    <div class="bott_right">
-                        <a class="btn-floating waves-effect waves-light">
+
+<head>
+    <meta charset="utf-8">
+    <title>stripmaker CC BY-SA 4.0</title>
+    <link rel="stylesheet" href="libs/materialize/materialize.min.css">
+    <link rel="stylesheet" href="libs/materialize/icon.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="libs/knockout/knockout-3.4.2.js" charset="utf-8"></script>
+    <script src="libs/knockout/knockout-es5.min.js" charset="utf-8"></script>
+    <script src="libs/materialize/materialize.min.js" charset="utf-8"></script>
+    <script src="js/Frame.js" charset="utf-8"></script>
+    <script src="index.js" charset="utf-8"></script>
+</head>
+
+<body class="blue-grey darken-4">
+    <div class="maincontainer">
+        <div class="row">
+            <div class="col s3" data-bind="with: frame_list">
+                <a class="waves-effect waves-light btn" id="open_file">open</a>
+                <ul class="frameslist">
+                    <!-- ko foreach: {data: frames, as: 'frame'} -->
+                    <li data-bind="
+                            text: frame.name,
+                            css: {selected: frame == $root.selected_frame},
+                            click: function() {
+                                $root.selected_frame = frame
+                            }
+                            ">-</li>
+                    <!-- /ko -->
+                </ul>
+                <!-- ko if: frames.length > 1 -->
+                <div class="bott_right">
+                    <a class="btn-floating waves-effect waves-light" data-bind="
+                        css: {disabled: $root.preview.animated},
+                        click: function() {
+                            if (!$root.preview.animated) {
+                                moveFrame(-1)
+                            }
+                        }">
                             <i class="material-icons">arrow_upward</i>
                         </a>
-                        <a class="btn-floating waves-effect waves-light">
+                    <a class="btn-floating waves-effect waves-light" data-bind="
+                        css: {disabled: $root.preview.animated},
+                        click: function() {
+                            if (!$root.preview.animated) {
+                                moveFrame(1)
+                            }
+                        }">
                             <i class="material-icons">arrow_downward</i>
                         </a>
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="col s9 borderl" data-bind="with: preview">
+                <canvas id="preview" width="580" height="500" data-bind="
+                        attr: {
+                            height: height,
+                            width: width
+                        },
+                        canvas: $root.selected_frame
+                    "></canvas>
+                <div class="bott_left">
+                    <span data-bind="text: 'x'+scale.toFixed(1)"></span>
+                    <a class="btn-floating waves-effect waves-light" data-bind="
+                        css: {disabled: !$root.selected_frame},
+                        click: function() {
+                            zoom(1)
+                        }
+                    ">
+                        <i class="material-icons">zoom_in</i>
+                    </a>
+                    <a class="btn-floating waves-effect waves-light" data-bind="
+                        css: {disabled: !$root.selected_frame || scale<=0.2},
+                        click: function() {
+                            zoom(0)
+                        }
+                    ">
+                        <i class="material-icons">zoom_out</i>
+                    </a>
+                    <div class="switch">
+                        <label>
+                            <input type="checkbox" data-bind="
+                                enable: $root.selected_frame && $root.frame_list.frames.length > 1,
+                                checked: animated
+                            ">
+                            <span class="lever"></span>
+                        </label>
+                        <span>preview</span>
+                    </div>
+                    <div class="input-field">
+                        <input id="fps" placeholder="_" type="number" class="fps" maxlength="2" data-bind="textInput: fps">
+                        <label for="fps" class="active">fps</label>
                     </div>
                 </div>
-                <div class="col s9 borderl">
-                    2
+                <div class="bott_right">
+                    <a class="waves-effect waves-light btn" data-bind="
+                        css: {disabled: $root.frame_list.frames.length == 0}
+                    ">save</a>
                 </div>
+
             </div>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

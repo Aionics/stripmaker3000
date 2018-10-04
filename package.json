@@ -4,14 +4,20 @@
     "description": "creating strips from images",
     "main": "main.js",
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "rebuild": "electron-rebuild -f -w canvas"
     },
     "author": "Aionics",
     "license": "CC BY-SA 4.0",
     "devDependencies": {
-        "electron": "^3.0.0"
+        "electron-rebuild": "^1.8.2"
     },
     "dependencies": {
-        "pangyp": "^2.3.3"
+        "async": "^2.6.1",
+        "canvas": "^1.6.12",
+        "electron": "^3.0.2",
+        "gif-frames": "^0.4.1",
+        "pangyp": "^2.3.3",
+        "stream-to-buffer": "^0.1.0"
     }
 }

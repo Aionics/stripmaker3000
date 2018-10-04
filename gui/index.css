@@ -18,13 +18,45 @@ body {
     border-left: 1px #37474f solid;
 }
 .selected {
-    background-color: #455a64;
+    background-color: #455a64 !important;
     border: 1px solid #546e7a;
 }
 .bott_right {
     position: absolute;
     bottom: 10px;
     right: 20px;
+}
+.bott_left {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    width: 500px;
+}
+.bott_left > .switch {
+    display: inline-block;
+    margin-right: 10px
+}
+.bott_left span {
+    color: white;
+}
+.bott_left input.fps {
+    height: 20px !important;
+    color: white;
+}
+.btn.disabled {
+    background-color: #757575 !important;
+}
+.btn-floating.disabled {
+    background-color: #757575 !important;
+}
+.bott_left .input-field {
+    display: inline-block;
+    width: 20px;
+    margin-top: inherit;
+    margin-bottom: inherit;
+}
+.switch > span {
+    margin-left: -10px;
 }
 .frameslist {
     overflow:hidden;
@@ -51,9 +83,20 @@ body {
 	background-color: #345;
     border: 1px #123 solid;
 }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .frameslist > li {
     padding: 0 5px 0 5px;
+    border: 1px solid rgba(0,0,0,0);
+    cursor: pointer;
+    color: white;
+}
+.frameslist > li:hover {
+    background-color: #345;
 }
 .toast_errored {
     background-color: #880e4f;
