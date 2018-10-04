@@ -43,6 +43,9 @@ body {
     height: 20px !important;
     color: white;
 }
+#add_file {
+    padding: 0 10px 0 10px;
+}
 .btn.disabled {
     background-color: #757575 !important;
 }
@@ -99,11 +102,17 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: #345;
 }
 .toast_errored {
-    background-color: #880e4f;
+    background-color: #a54;
+}
+.toast_warned {
+    background-color: #542;
+}
+.toast_log {
+    background-color: #243;
 }
 #toast-container {
   bottom: : auto !important;
   left: auto !important;
-  top: 5% !important;
-  right: 7% !important;
+  top: 76% !important;
+  right: 3% !important;
 }

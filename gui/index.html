@@ -18,7 +18,11 @@
     <div class="maincontainer">
         <div class="row">
             <div class="col s3" data-bind="with: frame_list">
-                <a class="waves-effect waves-light btn" id="open_file">open</a>
+                <a class="waves-effect waves-light btn" id="open_file" data-bind="click: $root.openFile.bind($data, 'new')">open</a>
+                <a class="waves-effect waves-light btn" id="add_file" data-bind="
+                    visible: frames.length
+                    click: $root.openFile.bind($data, 'add')"><i class="material-icons">add</i>
+                </a>
                 <ul class="frameslist">
                     <!-- ko foreach: {data: frames, as: 'frame'} -->
                     <li data-bind="
@@ -96,7 +100,8 @@
                 </div>
                 <div class="bott_right">
                     <a class="waves-effect waves-light btn" data-bind="
-                        css: {disabled: $root.frame_list.frames.length == 0}
+                        css: {disabled: $root.frame_list.frames.length == 0},
+                        click: $root.saveFile
                     ">save</a>
                 </div>
 

@@ -1,4 +1,6 @@
 const remote = require('electron').remote
+const mergeImg = require('merge-img');
+// console.log(mergeImg);
 // remote.getCurrentWindow().toggleDevTools();
 const mainWindow = remote.getGlobal('mainWindow')
 const dialog = remote.dialog
@@ -7,25 +9,16 @@ const fs = require('fs')
 const async = require('async')
 const gifFrames = require('gif-frames');
 const streamToBuffer = require('stream-to-buffer')
-// const Canvas = require('canvas')
-// const Canvas_Image = Canvas.Image
 
 const config = require('./config')
 const Frame = require('./js/Frame')
-
-let stripmaker = {
-    frame_list: require('./js/Framelist')(),
-    preview: require('./js/Preview')(config.preview_config),
-    selected_frame: null
-}
-ko.track(stripmaker)
 
 const readImageSync = (path) => {
     let bitmap = fs.readFileSync(path);
     return new Buffer(bitmap).toString('base64');
 }
 
-const openFile = () => {
+const openFile = (action) => {
     dialog.showOpenDialog(
         mainWindow, {
             title: "select an a file(gif) or a files(png, jpg)",
@@ -33,8 +26,11 @@ const openFile = () => {
             properties: ["multiSelections"]
         },
         (file_paths) => {
-            stripmaker.selected_frame = null
-            stripmaker.frame_list.frames = []
+            if (action == "new") {
+                stripmaker.selected_frame = null
+                stripmaker.frame_list.frames = []
+            }
+            stripmaker.preview.animated = false
             async.waterfall(file_paths.map((file_path) => {
                 return function (done) {
                     console.log(file_path);
@@ -92,6 +88,43 @@ const openFile = () => {
     )
 }
 
+const saveFile = () => {
+    dialog.showSaveDialog(mainWindow, {
+        title: "save as strip",
+        defaultPath: `strip`,
+        filters: [{ name: 'Strip(.png)', extensions: ['png'] }, { name: 'Animation(.gif)', extensions: ['gif'] }]
+    }, (file_name) => {
+        switch (path.extname(file_name)) {
+            case '.png':
+                const options = {
+                    format: 'png',
+                }
+                mergeImg(stripmaker.frame_list.frames.map((frame) => {
+                    return Buffer.from(frame.base64, 'base64')
+                })).then((merged_image) => {
+                    merged_image.write(file_name, ()=>{
+                        file_name
+                        M.toast({ html: `${file_name} successfully created`, classes: 'toast_log', displayLength: 6000 });
+                    })
+                })
+                break;
+            case '.gif':
+                M.toast({ html: 'saving as gif-animation is not impemented yet, sorry :c', classes: 'toast_errored', displayLength: 10000 });
+                break;
+        }
+        console.log(file_name);
+    })
+}
+
+let stripmaker = {
+    frame_list: require('./js/Framelist')(),
+    preview: require('./js/Preview')(config.preview_config),
+    selected_frame: null,
+    openFile: openFile,
+    saveFile: saveFile
+}
+ko.track(stripmaker)
+
 ko.bindingHandlers.canvas = {
     update: (dom, valueAccessor, allBindings, previewModel) => {
         let frame = ko.unwrap(valueAccessor());
@@ -133,7 +166,5 @@ document.addEventListener("DOMContentLoaded", function (event) {
             location.reload();
         }
     });
-    document.querySelector('#open_file').addEventListener('click', openFile)
     ko.applyBindings(stripmaker)
-    // M.toast({html: 'I am a toast!', classes: 'toast_errored'});
 });

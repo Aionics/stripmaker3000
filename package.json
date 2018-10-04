@@ -16,7 +16,10 @@
         "async": "^2.6.1",
         "canvas": "^1.6.12",
         "electron": "^3.0.2",
+        "electron-wix-msi": "^2.1.1",
         "gif-frames": "^0.4.1",
+        "images": "^3.0.1",
+        "merge-img": "^2.1.2",
         "pangyp": "^2.3.3",
         "stream-to-buffer": "^0.1.0"
     }
